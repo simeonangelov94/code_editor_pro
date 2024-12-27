@@ -5,9 +5,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:flutter_highlight/themes/monokai-sublime.dart';
-import 'package:highlight/languages/java.dart';
+// import 'package:highlight/languages/java.dart';
+import 'package:highlight/languages/sql.dart';
 
-import '../common/snippets.dart';
+import 'common/snippets.dart';
 
 void main() {
   runApp(const CodeEditor());
@@ -15,7 +16,7 @@ void main() {
 
 final controller = CodeController(
   text: javaFactorialSnippet,
-  language: java,
+  language: sql,
 );
 
 class CodeEditor extends StatelessWidget {
@@ -32,6 +33,7 @@ class CodeEditor extends StatelessWidget {
           child: SingleChildScrollView(
             child: CodeField(
               controller: controller,
+              gutterPadding: 4,
             ),
           ),
         ),

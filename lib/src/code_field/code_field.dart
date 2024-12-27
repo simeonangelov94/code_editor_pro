@@ -1,9 +1,7 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
-
 import '../code_theme/code_theme.dart';
 import '../gutter/gutter.dart';
 import '../line_numbers/gutter_style.dart';
@@ -153,7 +151,6 @@ class CodeField extends StatefulWidget {
   /// This is just passed as a parameter to a [TextField].
   /// See also [CodeController.readOnly].
   final bool readOnly;
-
   final Color? background;
   final EdgeInsets padding;
   final Decoration? decoration;
@@ -164,30 +161,32 @@ class CodeField extends StatefulWidget {
   final bool? lineNumbers;
 
   final GutterStyle gutterStyle;
+  final double? gutterPadding;
 
-  const CodeField({
-    super.key,
-    required this.controller,
-    this.minLines,
-    this.maxLines,
-    this.expands = false,
-    this.wrap = false,
-    this.background,
-    this.decoration,
-    this.textStyle,
-    this.padding = EdgeInsets.zero,
-    GutterStyle? gutterStyle,
-    this.enabled,
-    this.readOnly = false,
-    this.cursorColor,
-    this.textSelectionTheme,
-    this.lineNumberBuilder,
-    this.focusNode,
-    this.onChanged,
-    @Deprecated('Use gutterStyle instead') this.lineNumbers,
-    @Deprecated('Use gutterStyle instead')
-    this.lineNumberStyle = const GutterStyle(),
-  })  : assert(
+  const CodeField(
+      {super.key,
+      required this.controller,
+      this.minLines,
+      this.maxLines,
+      this.expands = false,
+      this.wrap = false,
+      this.background,
+      this.decoration,
+      this.textStyle,
+      this.padding = EdgeInsets.zero,
+      GutterStyle? gutterStyle,
+      this.enabled,
+      this.readOnly = false,
+      this.cursorColor,
+      this.textSelectionTheme,
+      this.lineNumberBuilder,
+      this.focusNode,
+      this.onChanged,
+      @Deprecated('Use gutterStyle instead') this.lineNumbers,
+      @Deprecated('Use gutterStyle instead')
+      this.lineNumberStyle = const GutterStyle(),
+      this.gutterPadding})
+      : assert(
             gutterStyle == null || lineNumbers == null,
             'Can not provide gutterStyle and lineNumbers at the same time. '
             'Please use gutterStyle and provide necessary columns to show/hide'),
@@ -219,13 +218,18 @@ class _CodeFieldState extends State<CodeField> {
   Size? windowSize;
   late TextStyle textStyle;
   Color? _backgroundCol;
-
   final _editorKey = GlobalKey();
   Offset? _editorOffset;
+
+  double? _gutterPadding = 4;
 
   @override
   void initState() {
     super.initState();
+
+    if (widget.gutterPadding != null) {
+      _gutterPadding = widget.gutterPadding;
+    }
     _controllers = LinkedScrollControllerGroup();
     _numberScroll = _controllers?.addAndGet();
     _codeScroll = _controllers?.addAndGet();
@@ -474,10 +478,12 @@ class _CodeFieldState extends State<CodeField> {
           ),
     );
 
-    return GutterWidget(
-      codeController: widget.controller,
-      style: gutterStyle,
-    );
+    return Container(
+        padding: EdgeInsets.only(top: _gutterPadding!),
+        child: GutterWidget(
+          codeController: widget.controller,
+          style: gutterStyle,
+        ));
   }
 
   void _updatePopupOffset() {

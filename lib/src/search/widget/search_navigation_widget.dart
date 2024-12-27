@@ -39,6 +39,7 @@ class SearchNavigationWidget extends StatelessWidget {
               ),
             ],
             const SizedBox(width: 10),
+            if(_getText() != null)
             Expanded(
               child: Text(_getText()),
             ),
