@@ -1,4 +1,4 @@
-name: flutter_code_editor
+name: code_editor_pro
 description: A customizable code field supporting syntax highlighting and code folding.
 version: 0.3.2
 repository: https://github.com/akvelon/flutter-code-editor
